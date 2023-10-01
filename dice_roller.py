@@ -1,36 +1,45 @@
+
 import random
-import re
 
 
-def roll_the_dice(dice_code):
-    """Simulates a dice roll based on the provided dice code."""
+def roll_dice(dice_code):
+    """
+    Simulates a dice roll based on the provided dice notation.
 
-    # Checking if the dice code matches the pattern
-    match = re.match(r'(\d*)D(\d+)([+-]\d+)?', dice_code)
-    if not match:
-        raise ValueError("Wrong input.")
+    :param str dice_code: Dice notation string, e.g., '3D6+2' for rolling a 6-sided dice three times and adding 2 to the result.
 
-    # Extracting values from the matched pattern
-    num_rolls = int(match.group(1)) if match.group(1) else 1
-    dice_type = int(match.group(2))
-    modifier = int(match.group(3)) if match.group(3) else 0
+    :rtype: int, str
+    :return: Computed dice roll result, or 'Wrong Input' if provided notation is invalid.
+    """
+    dice_type = ["D3", "D4", "D6", "D8", "D10", "D12", "D20", "D100"]
+    for dice in dice_type:
+        if dice in dice_code:
+            try:
+                multiply, modifier = dice_code.split(dice)
+            except ValueError:
+                return "Wrong input"
+            dice_value = int(dice[1:])
+            break
+    else:
+        return "Wrong input"
 
-    # Checking if the dice type is valid
-    if dice_type not in [3, 4, 6, 8, 10, 12, 20, 100]:
-        raise ValueError("Unknown dice type.")
+    try:
+        multiply = int(multiply) if multiply else 1
+    except ValueError:
+        return "Wrong input"
 
-    # Simulating the rolls
-    result = sum(random.randint(1, dice_type) for _ in range(num_rolls)) + modifier
+    try:
+        modifier = int(modifier) if modifier else 0
+    except ValueError:
+        return "Wrong input"
 
-    return result
+    return sum([random.randint(1, dice_value) for _ in range(multiply)]) + modifier
 
 
 if __name__ == '__main__':
-    # List of sample dice codes
-    sample_dice_codes = ["2D10+10", "D6", "2D3", "D12-1", "DD34", "4-3D6"]
-
-    for dice_code in sample_dice_codes:
-        try:
-            print(f"Result for {dice_code}: {roll_the_dice(dice_code)}")
-        except ValueError as e:
-            print(f"Error for {dice_code}: {e}")
+    print(roll_dice("2D10+10"))
+    print(roll_dice("D6"))
+    print(roll_dice("2D3"))
+    print(roll_dice("D12-1"))
+    print(roll_dice("DD34"))
+    print(roll_dice("4-3D6"))
