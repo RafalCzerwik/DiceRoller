@@ -1,15 +1,13 @@
-
 import random
 
 
 def roll_dice(dice_code):
     """
-    Simulates a dice roll based on the provided dice notation.
+    Simulates a dice roll based on the given notation.
 
-    :param str dice_code: Dice notation string, e.g., '3D6+2' for rolling a 6-sided dice three times and adding 2 to the result.
-
+    :param str dice_code: Notation like '3D6+2'.
     :rtype: int, str
-    :return: Computed dice roll result, or 'Wrong Input' if provided notation is invalid.
+    :return: Dice roll result or 'Wrong Input' for invalid notation.
     """
     dice_type = ["D3", "D4", "D6", "D8", "D10", "D12", "D20", "D100"]
     for dice in dice_type:
